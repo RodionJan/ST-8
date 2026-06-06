@@ -41,22 +41,22 @@ public class App {
         WebDriver driver = new ChromeDriver(options);
 
         try {
-            MusicData musicData = loadMusicDataFromFile("data/data.txt");
+            AlbumInfo albumDetails = parseMusicDataFile("data/data.txt");
 
             driver.get(BASE_URL);
             Thread.sleep(2000);
 
-            WebElement artistField = driver.findElement(By.xpath(ARTIST_INPUT_XPATH));
-            artistField.sendKeys(musicData.getArtist());
+            WebElement artistInputBox = driver.findElement(By.xpath(ARTIST_INPUT_XPATH));
+            artistInputBox.sendKeys(albumDetails.getArtist());
 
-            WebElement titleField = driver.findElement(By.xpath(TITLE_INPUT_XPATH));
-            titleField.sendKeys(musicData.getTitle());
+            WebElement albumTitleInput = driver.findElement(By.xpath(TITLE_INPUT_XPATH));
+            albumTitleInput.sendKeys(albumDetails.getTitle());
 
-            List<WebElement> trackInputs = driver.findElements(By.xpath(TRACK_INPUTS_XPATH));
-            List<String> tracks = musicData.getTracks();
+            List<WebElement> trackFields = driver.findElements(By.xpath(TRACK_INPUTS_XPATH));
+            List<String> songNames = albumDetails.getTracks();
 
-            for (int i = 0; i < trackInputs.size() && i < tracks.size(); i++) {
-                trackInputs.get(i).sendKeys(tracks.get(i));
+            for (int i = 0; i < trackFields.size() && i < songNames.size(); i++) {
+                trackFields.get(i).sendKeys(songNames.get(i));
             }
 
             WebElement jewelCaseRadio = driver.findElement(By.xpath(TYPE_JEWEL_CASE_XPATH));
@@ -74,7 +74,7 @@ public class App {
             String httpPdfUrl = pdfUrl.replace("https://", "http://");
 
             if (httpPdfUrl != null && httpPdfUrl.contains(".pdf")) {
-                downloadPdfFromUrl(httpPdfUrl, "result/cd.pdf");
+                fetchPdfFile(httpPdfUrl, "result/cd.pdf");
             }
 
         } catch (Exception e) {
@@ -89,7 +89,7 @@ public class App {
         }
     }
 
-    private static void downloadPdfFromUrl(String pdfUrl, String outputPath) throws IOException {
+    private static void fetchPdfFile(String pdfUrl, String outputPath) throws IOException {
         Path resultPath = Paths.get("result");
         if (!Files.exists(resultPath)) {
             Files.createDirectories(resultPath);
@@ -116,7 +116,7 @@ public class App {
         connection.disconnect();
     }
 
-    private static MusicData loadMusicDataFromFile(String filePath) throws IOException {
+    private static AlbumInfo parseMusicDataFile(String filePath) throws IOException {
         List<String> allLines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -133,28 +133,28 @@ public class App {
         }
 
         String artist = allLines.get(0);
-        String title = allLines.get(1);
-        List<String> tracks = new ArrayList<>();
+        String albumName = allLines.get(1);
+        List<String> songNames = new ArrayList<>();
         for (int i = 2; i < allLines.size(); i++) {
-            tracks.add(allLines.get(i));
+            songNames.add(allLines.get(i));
         }
 
-        return new MusicData(artist, title, tracks);
+        return new AlbumInfo(artist, albumName, songNames);
     }
 
-    static class MusicData {
+    static class AlbumInfo {
         private final String artist;
-        private final String title;
-        private final List<String> tracks;
+        private final String albumName;
+        private final List<String> songNames;
 
-        public MusicData(String artist, String title, List<String> tracks) {
+        public AlbumInfo(String artist, String albumName, List<String> songNames) {
             this.artist = artist;
-            this.title = title;
-            this.tracks = tracks;
+            this.albumName = albumName;
+            this.songNames = songNames;
         }
 
         public String getArtist() { return artist; }
-        public String getTitle() { return title; }
-        public List<String> getTracks() { return tracks; }
+        public String getTitle() { return albumName; }
+        public List<String> getTracks() { return songNames; }
     }
 }
