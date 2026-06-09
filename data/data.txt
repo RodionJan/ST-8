@@ -1,10 +1,6 @@
-9 gramm
-Nastoyaschiy rap
-Pachka sigaret
-V dele
-Zvezda po imeni Solntse
-To, chto tebya vstavlyaet
-Camin
-Ty ne znaesh eyo
-Gastroler
-Ej, detka
+
+ARTIST = The Midnight Echoes
+ALBUM = Neon Dreams
+TRACKS = Starlight Avenue, Midnight Drive, Neon Lights, Echoes in the Dark, City of Dreams,
+ Digital Rain, After Midnight, Lost in the Echo, Synthwave Sunset, Nightfall, Electric Heart,
+ Retro Future, Memory Lane, Distant Signals, Neon Skies, The Last Dance
